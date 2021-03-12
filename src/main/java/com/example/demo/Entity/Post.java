@@ -13,7 +13,17 @@ import java.util.Set;
 @Entity
 @Table
 public class Post {
-    public Post(Long postId, @NotBlank(message = "Post Name cannot be empty or Null") String postName, String url, String description, Integer voteCount, User user, Instant createdDate, SubPage subPage) {
+    public Post(Long postId,
+                @NotBlank(message = "Post Name cannot be empty or Null") String postName,
+                String url,
+                String description,
+                Integer voteCount,
+                User user,
+                Instant createdDate,
+                SubPage subPage,
+                String image) {
+
+        this.image = image;
         this.postId = postId;
         this.postName = postName;
         this.url = url;
@@ -45,9 +55,16 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id", referencedColumnName = "id")
     private SubPage subPage;
+    private String image;
 
 
+    public String getImage() {
+        return image;
+    }
 
+    public void setImage(String image) {
+        this.image = image;
+    }
 
     public Long getPostId() {
         return postId;

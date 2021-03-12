@@ -20,3 +20,27 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 </body>
 </html>
+
+
+<script>
+    function  getData (id){
+
+        $.ajax({
+            type: "POST",
+            url: "/postUp",
+            data: {
+
+                'id': id
+            },
+
+            success:function(data){
+                $("#1").empty();
+                $("#1").append(data);
+            }
+
+        });
+    }
+
+
+
+</script>

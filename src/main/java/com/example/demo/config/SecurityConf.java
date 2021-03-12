@@ -64,11 +64,10 @@ public class SecurityConf  extends WebSecurityConfigurerAdapter {
                 .logout();
     }
 
-
-
-
-
-
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/static/js**");
+    }
 
     @Autowired
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {

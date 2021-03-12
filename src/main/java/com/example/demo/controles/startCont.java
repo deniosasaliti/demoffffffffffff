@@ -3,18 +3,21 @@ package com.example.demo.controles;
 import com.example.demo.Entity.*;
 import com.example.demo.repos.AuthorRepository;
 import com.example.demo.repos.BookRepository;
+import com.example.demo.repos.PostRepo;
 import com.example.demo.repos.userRepos;
 import com.example.demo.service.BookService;
 import com.example.demo.service.MailService;
 import com.example.demo.service.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Iterator;
+import java.util.List;
 
 
 @Controller
@@ -30,11 +33,15 @@ public class startCont {
     final
     BookService bookService;
 
-    final AuthorRepository authorRepository;
+    final
+    AuthorRepository authorRepository;
+
+    final
+    PostRepo postRepo;
 
 
 
-    public startCont(UserService userService, userRepos userRepos, MailService mailService, BookRepository bookRepository, BookService bookService, AuthorRepository authorRepository) {
+    public startCont(UserService userService, userRepos userRepos, MailService mailService, BookRepository bookRepository, BookService bookService, AuthorRepository authorRepository, PostRepo postRepo) {
         this.userService = userService;
 
         this.userRepos = userRepos;
@@ -45,11 +52,19 @@ public class startCont {
         this.bookService = bookService;
 
         this.authorRepository = authorRepository;
+        this.postRepo = postRepo;
     }
 
 
-    @GetMapping
-    public String index() {
+    @GetMapping("/")
+
+    public String index(Model model) {
+
+        PageRequest pageRequest = PageRequest.of(0,5);
+        List<Post> list = postRepo.
+                findAll(pageRequest).getContent();
+            model.addAttribute("list", list);
+
         return "index";
     }
 
@@ -89,8 +104,6 @@ public class startCont {
             return "/signup";
         }
 
-
-
         model.addAttribute("user", user);
         return "/signup";
     }
@@ -105,7 +118,6 @@ public class startCont {
                              Model model){
         if (Boolean.TRUE.equals(error)){
             model.addAttribute("error",true);
-
         }
         return "/login";
     }
@@ -116,15 +128,16 @@ public class startCont {
     }
 
 
-    @GetMapping("/successPage")
-    public String getSuccessPage(){
-        return "/successPage";
+
+
+
+
+    @GetMapping("/textArea")
+    public String getTestArea(){
+        return "/parts/textArea";
     }
 
-    @GetMapping("/tt")
-    public String getTtPage(){
-        return "/tt";
-    }
+
 
 
 

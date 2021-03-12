@@ -28,7 +28,6 @@
     <form action="/logout" method="post">
         <button class="btn btn-primary" type="submit">Log Out</button>
     </form>
-
 </#macro>
 
 <#macro login>

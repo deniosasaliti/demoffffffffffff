@@ -1,8 +1,14 @@
-<#import "parts/comon.ftl" as c>
+<#import "parts/PostPage.ftl" as post>
+<#import "parts/postParts.ftl" as postParts>
 
 
-<@c.page>
-<img src="/images/вжух.jpg">
 
-</@c.page>
+<@post.PostPage>
+    <@postParts.postPart list>
+    </@postParts.postPart>
+</@post.PostPage>
+
+
+
+
 
