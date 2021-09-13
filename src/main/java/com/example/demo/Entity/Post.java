@@ -5,14 +5,18 @@ import com.sun.istack.Nullable;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.EnumSet;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
-import java.util.Set;
+
 
 @Entity
-@Table
+@Table(name = "post",schema = "my_scheme")
 public class Post {
+
+
     public Post(Long postId,
                 @NotBlank(message = "Post Name cannot be empty or Null") String postName,
                 String url,
@@ -20,7 +24,6 @@ public class Post {
                 Integer voteCount,
                 User user,
                 Instant createdDate,
-                SubPage subPage,
                 String image) {
 
         this.image = image;
@@ -31,7 +34,8 @@ public class Post {
         this.voteCount = voteCount;
         this.user = user;
         this.createdDate = createdDate;
-        this.subPage = subPage;
+
+
     }
 
     public Post() {
@@ -48,15 +52,41 @@ public class Post {
     @Lob
     private String description;
     private Integer voteCount = 0;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
     private Instant createdDate;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id", referencedColumnName = "id")
-    private SubPage subPage;
-    private String image;
 
+    private String image;
+    @Enumerated(EnumType.STRING)
+    private Categories categories;
+    @OneToMany(mappedBy ="post",orphanRemoval = true,fetch = FetchType.LAZY)
+    private List<Comment> comments;
+
+
+
+
+
+
+    public void addComment(Comment comment) {
+      comments.add(comment);
+      comment.setPost(this);
+    }
+
+
+    public void removeComment(Comment comment) {
+        comments.remove(comment);
+        comment.setPost(null);
+    }
+
+
+    public Categories getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Categories categories) {
+        this.categories = categories;
+    }
 
     public String getImage() {
         return image;
@@ -122,11 +152,11 @@ public class Post {
         this.createdDate = createdDate;
     }
 
-    public SubPage getSubPage() {
-        return subPage;
+    public List<Comment> getComments() {
+        return comments;
     }
 
-    public void setSubPage(SubPage subPage) {
-        this.subPage = subPage;
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 }

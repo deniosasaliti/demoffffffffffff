@@ -1,13 +1,71 @@
 package com.example.demo.repos;
 
+import com.example.demo.Dto.PostDetail;
+import com.example.demo.Dto.PostDto;
+import com.example.demo.Dto.PostResponseDto;
+import com.example.demo.Entity.Categories;
 import com.example.demo.Entity.Post;
+import com.example.demo.Entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.Instant;
+import java.util.List;
+
 public interface PostRepo extends JpaRepository<Post,Long> {
     @Modifying
     @Query("update Post p set p.voteCount = p.voteCount +1 where p.postId = :id")
     public void updateCounterUp(@Param("id") Long id);
+
+
+    @Modifying
+    @Query("update Post p set p.voteCount = p.voteCount -1 where p.postId = :id")
+    public void updateCounterDown(@Param("id") Long id);
+
+
+
+//    Page<Post> list = findAll(PageRequest pageRequest);
+    @Query(value = "select p  from Post p left join fetch  p.user",
+    countQuery = "select count(p) from Post p")
+     Page<Post> findAllByPostFetchJoinUser(PageRequest pageRequest);
+
+    Page<Post> findByCategories(Categories categories, Pageable pageable);
+
+
+    double countByCategories(Categories categories);
+
+//    @Query(value = "select p,( select count (c) from Comment c where p.postId = c.post.postId) from Post p")
+//    List<PostDto> findAllPostsByCategoriesAndCommentsCount(@Param("categories") Categories categories,
+//                                                           Pageable pageable);
+
+    @Query(value = "select p.categories as categories,p.url as url,p.description as description,p.voteCount as voteCount,p.user as user,p.createdDate as createdDate,p.image as image,p.postName as postName,p.postId as postId,count (c) as commentCount" +
+            "  from Post p   " +
+            "   left  join  p.comments c where p.categories = :category group by p")
+    Page<PostDetail> findAllPostsByCategoryAndCommentsCount(@Param("category") Categories category,
+                                                                Pageable pageable);
+
+    
+    @Query(value = "select p.categories as categories,p.url as url,p.description as description,p.voteCount as voteCount,p.user  as user ,p.createdDate as createdDate,p.image as image,p.postName as postName,p.postId as postId,count (c) as commentCount" +
+            " from Post p" +
+            " left join  p.comments c  group by p")
+    Page<PostDetail> findAllPostsByCategoryAndCommentsCount(Pageable pageable);
+    
+
+
+
+
+
+
+
+
 }
+
+
+
+

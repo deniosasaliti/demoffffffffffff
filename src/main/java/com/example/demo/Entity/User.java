@@ -2,20 +2,21 @@ package com.example.demo.Entity;
 
 
 
-import org.hibernate.engine.internal.StatefulPersistenceContext;
+
+import com.example.demo.validation.UniqueUserName;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+
 
 
 @Entity
-@Table(name = "user")
+@Table(name = "user" ,schema = "my_scheme")
 public class User  implements UserDetails {
 
 
@@ -24,13 +25,9 @@ public class User  implements UserDetails {
         private Long id;
 
 
-        @OneToOne(
-                cascade = CascadeType.ALL,mappedBy = "user",
-                fetch = FetchType.LAZY,optional = false)
-        private  VerificationToken verificationToken;
 
-
-        @NotBlank(message = "a u IDIOT?")
+        @UniqueUserName
+        @Size(max = 10 )
         private String name;
 
         @NotBlank(message = "a u IDIOT?")
@@ -42,11 +39,8 @@ public class User  implements UserDetails {
         @Column(name = "password")
         private String password;
 
-    public User(Long userId, VerificationToken verificationToken,
-                String name, String email, String password
-                ) {
+    public User(Long userId, String name, String email, String password) {
         this.id = userId;
-        this.verificationToken = verificationToken;
         this.name = name;
         this.email = email;
         this.password = password;
@@ -56,26 +50,6 @@ public class User  implements UserDetails {
     public User() {
 
     }
-
-    public void addToken(VerificationToken token){
-        verificationToken = token;
-        verificationToken.setUser(this);
-    }
-
-    public void removeToken(VerificationToken token){
-
-        verificationToken = null;
-    }
-
-
-    public VerificationToken getVerificationToken() {
-        return verificationToken;
-    }
-
-    public void setVerificationToken(VerificationToken verificationToken) {
-        this.verificationToken = verificationToken;
-    }
-
 
 
     public String getName() {
@@ -107,6 +81,8 @@ public class User  implements UserDetails {
     public String getUsername() {
         return getName();
     }
+
+
 
     @Override
     public boolean isAccountNonExpired() {

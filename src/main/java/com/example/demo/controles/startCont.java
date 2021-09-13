@@ -1,22 +1,18 @@
 package com.example.demo.controles;
 
+import com.example.demo.Dto.PostDetail;
 import com.example.demo.Entity.*;
-import com.example.demo.repos.AuthorRepository;
-import com.example.demo.repos.BookRepository;
-import com.example.demo.repos.PostRepo;
-import com.example.demo.repos.userRepos;
-import com.example.demo.service.BookService;
+import com.example.demo.repos.*;
 import com.example.demo.service.MailService;
+import com.example.demo.service.PostService;
 import com.example.demo.service.UserService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -28,54 +24,84 @@ public class startCont {
     userRepos userRepos;
     final
     MailService mailService;
-    final
-    BookRepository bookRepository;
-    final
-    BookService bookService;
-
-    final
-    AuthorRepository authorRepository;
 
     final
     PostRepo postRepo;
 
+    final CommentsRepo commentsRepo;
+    final PostService postService;
 
 
-    public startCont(UserService userService, userRepos userRepos, MailService mailService, BookRepository bookRepository, BookService bookService, AuthorRepository authorRepository, PostRepo postRepo) {
+
+    public startCont(UserService userService, userRepos userRepos, MailService mailService, PostRepo postRepo, CommentsRepo commentsRepo, PostService postService) {
         this.userService = userService;
 
         this.userRepos = userRepos;
 
         this.mailService = mailService;
 
-        this.bookRepository = bookRepository;
-        this.bookService = bookService;
-
-        this.authorRepository = authorRepository;
         this.postRepo = postRepo;
+        this.commentsRepo = commentsRepo;
+        this.postService = postService;
     }
 
 
     @GetMapping("/")
-
     public String index(Model model) {
+      return listByPage(0,"nf",model);
+    }
 
-        PageRequest pageRequest = PageRequest.of(0,5);
-        List<Post> list = postRepo.
-                findAll(pageRequest).getContent();
-            model.addAttribute("list", list);
 
+    @GetMapping("/page/{pageNumber}/{categoryFilter}")
+    public String listByPage(@PathVariable("pageNumber") int currentPage,
+                              @PathVariable ("categoryFilter") String categoryFilter,
+                              Model model){
+
+        int pageSize = 4;
+        boolean filterOn;
+        filterOn = !categoryFilter.equals("nf");
+
+        double postCount;
+        Categories newCategory = null;
+
+
+        if (!filterOn){
+            postCount = postRepo.count();
+        }else{
+
+            newCategory = Categories.valueOf(categoryFilter);
+            postCount = postRepo.countByCategories(newCategory);
+        }
+
+        long totalPages  = (long)Math.ceil(postCount/pageSize);
+
+
+        if (currentPage >= totalPages && postCount > 0) {
+            currentPage = (int) totalPages-1;
+        }
+
+        Pageable pageable = PageRequest.of(currentPage,pageSize);
+        List<PostDetail> list;
+
+        if (filterOn){
+            list = postRepo.findAllPostsByCategoryAndCommentsCount(newCategory,pageable).getContent();
+        }else
+            list = postRepo.findAllPostsByCategoryAndCommentsCount(pageable).getContent();
+
+        if (filterOn){
+            model.addAttribute("categoryFilter", newCategory);
+        }else{
+            model.addAttribute("categoryFilter","nf");
+
+        }
+        model.addAttribute("list", list);
+        System.out.println(totalPages);
+        model.addAttribute("currentPage",currentPage);
+        model.addAttribute("totalPages",totalPages);
         return "index";
     }
 
-
-    @GetMapping("/testPage")
-    public String getTestPage(){
-        return "testPage";
-    }
-
     @GetMapping("/signup")
-
     public String signup(Model model) {
 
         model.addAttribute("user" ,new User());
@@ -90,16 +116,10 @@ public class startCont {
 
         if (!result.hasErrors()) {
 
-            NotificationEmail notificationEmail = new
-                    NotificationEmail(user.getName(),
-                    user.getEmail(),
-                    "http://myseria.net/");
 
-            mailService.sendEmail(notificationEmail, model.asMap());
-            model.addAttribute("name",user.getName());
-            model.addAttribute("success",notificationEmail.getSuccessUrl());
+
             model.addAttribute("noError",result);
-            userService.saveUser(user);
+            userService.saveUser(user,model.asMap());
 
             return "/signup";
         }
@@ -107,9 +127,12 @@ public class startCont {
         model.addAttribute("user", user);
         return "/signup";
     }
-    @GetMapping("/hello")
-    public String getHello(){
-        return "hello";
+    @GetMapping("/userPage/{id}")
+    public String getUserPage(@PathVariable("id") Long id,
+                           Model model){
+        User userById = userService.findUserById(id);
+        model.addAttribute("user1",userById);
+        return "userPage";
     }
 
     @GetMapping("/login")
@@ -132,13 +155,20 @@ public class startCont {
 
 
 
-    @GetMapping("/textArea")
-    public String getTestArea(){
-        return "/parts/textArea";
+    @GetMapping("/postComments/{postId}/{commentsCount}")
+    public String getTestArea(Model model,@PathVariable ("postId") Long postId,
+                              @PathVariable ("commentsCount") int commentsCount){
+
+
+        Post post = postService.findByPostById(postId);
+        if (commentsCount!= 0){
+            List<Comment> commentByPost = post.getComments();
+            model.addAttribute("comments",commentByPost);
+        }
+        model.addAttribute("Post",post);
+
+        return "parts/comments";
     }
-
-
-
 
 
 

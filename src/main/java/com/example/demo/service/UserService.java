@@ -2,78 +2,75 @@ package com.example.demo.service;
 
 import com.example.demo.Entity.NotificationEmail;
 import com.example.demo.Entity.User;
-import com.example.demo.Entity.VerificationToken;
-import com.example.demo.repos.VerificationTokenRepo;
 import com.example.demo.repos.userRepos;
-import org.springframework.stereotype.Repository;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 
+import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class UserService {
-    private final Map<String, Object> model = new HashMap<>();
 
-    final userRepos userRepos;
-    final VerificationTokenRepo verificationTokenRepo;
+    final userRepos userRepository;
+    final TokenService tokenService;
     final MailService mailService;
 
 
 
 
 
-    public UserService(userRepos userRepos, VerificationTokenRepo verificationTokenRepo, MailService mailService) {
-        this.userRepos = userRepos;
-        this.verificationTokenRepo = verificationTokenRepo;
+
+    public UserService(userRepos userRepos, TokenService tokenService, MailService mailService) {
+        this.userRepository = userRepos;
+        this.tokenService = tokenService;
         this.mailService = mailService;
+
+    }
+
+
+
+//    @Transactional
+//    public boolean isUserNameAlreadyUse(String userName){
+//        boolean userInBd = true;
+//        if (userRepository.findByName(userName) == null){
+//            userInBd = false;
+//        }
+//        return userInBd;
+//    }
+
+    @Transactional
+    public User findUserById(Long id){
+        return     userRepository.findById(id).orElseThrow(
+                    ()->new UsernameNotFoundException("user not found"));
     }
 
 
     @Transactional
     public User findUserByUserName(String name){
-        return userRepos.findUsersByName(name);
+        return userRepository.findUsersByName(name);
     }
 
 
    @Transactional
-    public void saveUser(User user) throws Exception {
+    public void saveUser(User user,Map<String,Object> model) throws Exception {
 
         NotificationEmail notificationEmail = new NotificationEmail("please activate your account",
                 user.getEmail(),"http://localhost:8080/accountVerification/");
-        String token = generateVerificationToken(user);
+        String token = tokenService.generateVerificationToken(user);
         model.put("name",user.getName());
         model.put("success",notificationEmail.getSuccessUrl()+token);
-        userRepos.save(user);
+       userRepository.save(user);
         mailService.sendEmail(notificationEmail,model);
 
-    }
-
-    @Transactional
-    public VerificationToken  removeToken(String name){
-        VerificationToken token = verificationTokenRepo.findById(11L).get();
-return token;
-    }
-
-    @Transactional
-    public User  removeUser(String name){
-        User user = userRepos.findById(11L).get();
-        return user;
 
     }
 
 
 
-   private String generateVerificationToken(User user) {
-       String token = UUID.randomUUID().toString();
-       VerificationToken verificationToken = new VerificationToken();
-       verificationToken.setToken(token);
-       verificationToken.setUser(user);
-        verificationTokenRepo.save(verificationToken);
-        return token;
-   }
+
+
+
 }

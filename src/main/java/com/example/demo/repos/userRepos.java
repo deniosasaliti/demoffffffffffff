@@ -23,6 +23,9 @@ public interface userRepos extends JpaRepository<User,Long> {
             (String email,String userName);
     User findUserByEmailNotLikeAndNameNotLike(String email,String name);
 
+    User findByName(String userName);
+
+
 
 
 

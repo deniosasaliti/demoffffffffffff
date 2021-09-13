@@ -3,7 +3,7 @@ import javax.persistence.*;
 
 
 @Entity
-@Table(name = "token")
+@Table(name = "token",schema = "my_scheme")
 public class VerificationToken {
 
 
@@ -11,12 +11,11 @@ public class VerificationToken {
 
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String token;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
-    @JoinColumn(name = "id")
     private User user;
 
     

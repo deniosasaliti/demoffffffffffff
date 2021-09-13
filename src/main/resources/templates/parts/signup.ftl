@@ -1,5 +1,10 @@
 <#import "springBind.ftl" as spring />
 <#macro signup >
+
+    <div class="pt-5 ">
+
+
+
         <form action="/validationForm" method="post">
 
 

@@ -23,8 +23,8 @@ import java.util.UUID;
 @Controller
 public class SecondCont {
 
-    @Value("${upload.path}")
-    private String uploadPath;
+//    @Value("${upload.path}")
+//    private String uploadPath;
 
 
 final PostService postService;

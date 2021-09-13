@@ -30,16 +30,9 @@ class UserServiceTest {
     void tearDown() {
     }
 
-    @Test
-    void findUserByUserName() {
-        User ddd = service.findUserByUserName("ddd");
-        Assertions.assertNotNull(ddd);
-    }
 
-    @Test
-    void deleteToken(){
-        service.removeToken("Denis");
-    }
+
+
 
 
 }

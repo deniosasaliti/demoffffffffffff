@@ -1,5 +1,4 @@
-<#assign
-    aut = SPRING_SECURITY_CONTEXT??/>
+<#assign aut = SPRING_SECURITY_CONTEXT??/>
 <#if aut>
 
     <#assign

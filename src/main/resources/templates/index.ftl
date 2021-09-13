@@ -3,8 +3,10 @@
 
 
 
-<@post.PostPage>
-    <@postParts.postPart list>
+
+
+<@post.PostPage currentPage totalPages categoryFilter  >
+    <@postParts.postPart list categoryFilter currentPage >
     </@postParts.postPart>
 </@post.PostPage>
 

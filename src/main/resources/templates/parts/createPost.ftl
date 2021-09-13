@@ -1,6 +1,8 @@
 <#import "textArea.ftl" as textArea>
 <#macro createPost>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"  data-whatever="@mdo">create post</button>
+
+    <div>
+    <button  type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"  data-whatever="@mdo">create post</button>
 
 
     <div class="modal fade " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -16,7 +18,14 @@
                     <form  id="createForm" method="post" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="recipient-name" class="col-form-label">description:</label>
-                            <input type="text" class="form-control" name="description" id="recipient-name">
+                            <input type="text" class="form-control" name="description">
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">categories:</label>
+                            <select class="form-control" id="exampleFormControlSelect1" name="categories">
+                                <option>GOODNESS</option>
+                                <option>EVIL</option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="recipient-name" class="col-form-label">FileName:</label>
@@ -27,7 +36,7 @@
                         <@textArea.textArea></@textArea.textArea>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button id="CloseModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             <button  id="submit_1" type="button"   class="btn btn-primary">create post</button>
                         </div>
                     </form>
@@ -37,5 +46,6 @@
 
             </div>
         </div>
+    </div>
     </div>
 </#macro>
