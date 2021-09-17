@@ -16,7 +16,7 @@ import java.util.Collection;
 
 
 @Entity
-@Table(name = "user" ,schema = "my_scheme")
+//@Table(name = "user" ,schema = "my_scheme")
 public class User  implements UserDetails {
 
 

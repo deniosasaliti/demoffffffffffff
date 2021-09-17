@@ -3,7 +3,7 @@ import javax.persistence.*;
 
 
 @Entity
-@Table(name = "token",schema = "my_scheme")
+@Table(name = "token")
 public class VerificationToken {
 
 

@@ -1,7 +1,6 @@
 package com.example.demo.repos;
 
 import com.example.demo.Entity.User;
-import jdk.internal.dynalink.linker.LinkerServices;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;

@@ -13,7 +13,7 @@ import java.util.List;
 
 
 @Entity
-@Table(name = "post",schema = "my_scheme")
+//@Table(name = "post",schema = "my_scheme")
 public class Post {
 
 
@@ -52,7 +52,7 @@ public class Post {
     @Lob
     private String description;
     private Integer voteCount = 0;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
     private Instant createdDate;
