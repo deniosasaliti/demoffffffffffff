@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.Dto.PostIdDto;
+import com.example.demo.dto.PostIdDto;
 import com.example.demo.Entity.*;
 import com.example.demo.exceptions.SpringRedditException;
 import com.example.demo.repos.VoteRepo;

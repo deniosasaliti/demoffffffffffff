@@ -1,6 +1,6 @@
 package com.example.demo.controles;
 
-import com.example.demo.Dto.PostDetail;
+import com.example.demo.dto.PostDetail;
 import com.example.demo.Entity.*;
 import com.example.demo.repos.*;
 import com.example.demo.service.MailService;
@@ -142,6 +142,7 @@ public class startCont {
         if (Boolean.TRUE.equals(error)){
             model.addAttribute("error",true);
         }
+
         return "/login";
     }
 
@@ -150,8 +151,11 @@ public class startCont {
         return "/form";
     }
 
+    @GetMapping("/successPage")
+    public String   getSuccessPage(){
 
-
+        return "successPage";
+    }
 
 
 

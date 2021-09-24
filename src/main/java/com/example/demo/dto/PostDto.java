@@ -1,8 +1,4 @@
-package com.example.demo.Dto;
-
-import com.example.demo.Entity.User;
-
-import java.time.Instant;
+package com.example.demo.dto;
 
 public class PostDto {
     String category;

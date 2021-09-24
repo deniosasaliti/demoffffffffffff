@@ -6,7 +6,6 @@ import javax.persistence.*;
 import javax.persistence.Entity;
 
 @Entity
-@Table(name = "vote",schema = "my_scheme")
 public class Vote {
 
 

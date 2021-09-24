@@ -4,11 +4,11 @@ import com.example.demo.Entity.NotificationEmail;
 import com.example.demo.Entity.User;
 import com.example.demo.repos.userRepos;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
 import javax.transaction.Transactional;
-import java.util.HashMap;
 import java.util.Map;
 
 @Service
@@ -17,17 +17,19 @@ public class UserService {
     final userRepos userRepository;
     final TokenService tokenService;
     final MailService mailService;
+    final PasswordEncoder passwordEncoder;
 
 
 
 
 
 
-    public UserService(userRepos userRepos, TokenService tokenService, MailService mailService) {
+    public UserService(userRepos userRepos, TokenService tokenService, MailService mailService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepos;
         this.tokenService = tokenService;
         this.mailService = mailService;
 
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -57,6 +59,7 @@ public class UserService {
    @Transactional
     public void saveUser(User user,Map<String,Object> model) throws Exception {
 
+//        user.setPassword(passwordEncoder.encode(user.getPassword()));
         NotificationEmail notificationEmail = new NotificationEmail("please activate your account",
                 user.getEmail(),"http://localhost:8080/accountVerification/");
         String token = tokenService.generateVerificationToken(user);

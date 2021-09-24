@@ -2,10 +2,12 @@ package com.example.demo.config;
 
 
 
-import com.example.demo.providers.Provider;
-import com.example.demo.service.UserDetService;
+import com.example.demo.security.PrincipalDetailsService;
+
+
+import com.example.demo.security.providers.Provider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -14,43 +16,38 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.web.FilterChainProxy;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.LogoutFilter;
-
-import javax.servlet.FilterChain;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@ComponentScan("com.example.demo.providers")
+@ComponentScan("com.example.demo.security.providers")
 public class SecurityConf  extends WebSecurityConfigurerAdapter {
 
-    final
-    Provider provider;
-    final
-    UserDetService userDetailsService;
+    final Provider provider;
+//    final PrincipalDetailsService principalDetailsService;
 
-    public SecurityConf(Provider provider, UserDetService userDetailsService) {
 
+    public SecurityConf(Provider provider) {
         this.provider = provider;
 
-        this.userDetailsService = userDetailsService;
+
     }
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
                 .authorizeRequests()
-
+                .antMatchers("/successPage").hasRole("ADMIN")
                 .antMatchers("/login","/").permitAll()
-                .antMatchers("/successPage").authenticated()
+
                         .and()
                 .formLogin()
                 .loginPage("/login")
@@ -59,7 +56,7 @@ public class SecurityConf  extends WebSecurityConfigurerAdapter {
                 .usernameParameter("name")
                         .and()
                 .exceptionHandling()
-                .accessDeniedPage("/successPage")
+
                         .and()
                 .logout();
     }
@@ -67,15 +64,19 @@ public class SecurityConf  extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/static/js**");
+
     }
 
     @Autowired
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-
-        auth.authenticationProvider(provider);
-
-
+    protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+        authenticationManagerBuilder.authenticationProvider(provider);
+//        authenticationManagerBuilder.userDetailsService(principalDetailsService)
 
     }
+//    @Bean(BeanIds.AUTHENTICATION_MANAGER)
+//    @Override
+//    public AuthenticationManager authenticationManagerBean() throws Exception {
+//        return super.authenticationManagerBean();
+//    }
 
 }

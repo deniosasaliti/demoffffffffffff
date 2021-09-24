@@ -13,7 +13,6 @@ import java.util.List;
 
 
 @Entity
-@Table(name = "post",schema = "my_scheme")
 public class Post {
 
 

@@ -1,10 +1,9 @@
 package com.example.demo.controles;
 
-import com.amazonaws.services.dynamodbv2.xspec.S;
-import com.example.demo.Dto.CommentDto;
-import com.example.demo.Dto.PostDto;
-import com.example.demo.Dto.PostIdDto;
-import com.example.demo.Dto.PostResponseDto;
+import com.example.demo.dto.CommentDto;
+import com.example.demo.dto.PostDto;
+import com.example.demo.dto.PostIdDto;
+import com.example.demo.dto.PostResponseDto;
 import com.example.demo.Entity.*;
 import com.example.demo.exceptions.NotAuthenticationException;
 import com.example.demo.repos.CommentsRepo;
@@ -12,7 +11,6 @@ import com.example.demo.repos.PostRepo;
 import com.example.demo.service.AwsBucketService;
 import com.example.demo.service.PostService;
 import com.example.demo.service.VoteService;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,14 +19,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Objects;
 import java.util.UUID;
 
 @RestController

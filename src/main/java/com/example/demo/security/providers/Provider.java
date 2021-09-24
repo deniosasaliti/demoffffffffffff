@@ -1,4 +1,5 @@
-package com.example.demo.providers;
+package com.example.demo.security.providers;
+import com.example.demo.Entity.enums.Permissions;
 import com.example.demo.Entity.User;
 import com.example.demo.repos.userRepos;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -7,21 +8,23 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 @Component
 public class Provider implements AuthenticationProvider {
 
-    final
-    userRepos userRepo;
+    final userRepos userRepo;
+
 
 
     public Provider(userRepos userRepo) {
         this.userRepo = userRepo;
+
+
     }
 
     @Override
@@ -35,10 +38,12 @@ public class Provider implements AuthenticationProvider {
         String password = authentication.getCredentials().toString();
         if (!password.equals(user.getPassword()))
             throw new BadCredentialsException("Bad credentials");
+        Collection<GrantedAuthority> authorities = user.getAuthorities();
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + Permissions.DELETE_POST.getAuthority()));
 
-        List<GrantedAuthority> authorities = new ArrayList<>();
 
-        return new UsernamePasswordAuthenticationToken(user,null,authorities);
+        return new UsernamePasswordAuthenticationToken(user, null,authorities);
+
     }
 
     @Override

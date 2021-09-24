@@ -1,10 +1,9 @@
 package com.example.demo.service;
 
-import com.example.demo.Dto.CommentDto;
+import com.example.demo.dto.CommentDto;
 import com.example.demo.Entity.Categories;
 import com.example.demo.Entity.Comment;
 import com.example.demo.Entity.Post;
-import com.example.demo.Dto.PostIdDto;
 import com.example.demo.exceptions.SpringRedditException;
 import com.example.demo.repos.CommentsRepo;
 import com.example.demo.repos.PostRepo;
