@@ -1,12 +1,16 @@
 package com.example.demo.config;
 
 
+import com.example.demo.security.JwtAuthenticationFilter;
 import com.example.demo.security.PrincipalDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,6 +20,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.beans.Encoder;
 
@@ -31,7 +36,16 @@ public class SecurityConf  extends WebSecurityConfigurerAdapter {
         final PrincipalDetailsService principalDetailsService;
 
 
+    @Bean(BeanIds.AUTHENTICATION_MANAGER)
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
 
+    @Bean
+    public JwtAuthenticationFilter authenticationFilter(){
+        return new JwtAuthenticationFilter();
+    }
 
 
     @Override
@@ -53,6 +67,7 @@ public class SecurityConf  extends WebSecurityConfigurerAdapter {
                 .accessDeniedPage("/successPage")
                         .and()
                 .logout();
+        http.addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override

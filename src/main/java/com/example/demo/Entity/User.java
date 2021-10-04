@@ -3,6 +3,7 @@ package com.example.demo.Entity;
 
 
 
+import com.amazonaws.services.dynamodbv2.xspec.S;
 import com.example.demo.validation.UniqueUserName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,6 +46,10 @@ public class User  {
         @NotBlank(message = "a u IDIOT?")
         @Column(name = "password")
         private String password;
+
+        @ManyToOne(fetch = FetchType.EAGER)
+        @JoinColumn( name = "role_id")
+        private Role Role;
 }
 
 

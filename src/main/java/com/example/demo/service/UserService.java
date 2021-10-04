@@ -43,13 +43,14 @@ public class UserService {
     @Transactional
     public User findUserById(Long id){
         return     userRepository.findById(id).orElseThrow(
-                    ()->new UsernameNotFoundException("user not found"));
+                    ()->new UsernameNotFoundException("user by " + id + "not found"));
     }
 
 
     @Transactional
     public User findUserByUserName(String name){
-        return userRepository.findUsersByName(name);
+        return userRepository.findUsersByName(name)
+                .orElseThrow(()-> new UsernameNotFoundException("user by " + name + "not found"));
     }
 
 
