@@ -1,19 +1,16 @@
 package com.example.demo.Entity;
 
+import com.example.demo.Entity.enums.Categories;
 import com.sun.istack.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.List;
 
 
 @Entity
-@Table(name = "post",schema = "my_scheme")
+@Table(name = "post")
 public class Post {
 
 

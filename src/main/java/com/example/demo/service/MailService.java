@@ -1,20 +1,17 @@
 package com.example.demo.service;
 
-import com.example.demo.Entity.NotificationEmail;
+import com.example.demo.utilPojo.NotificationEmail;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import javax.mail.internet.MimeMessage;
 import java.util.Map;
-import java.util.concurrent.Future;
 
 @Service
 public class MailService {

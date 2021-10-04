@@ -12,12 +12,12 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.PersistenceContext;
 import java.awt.print.Pageable;
 import java.util.List;
-
+import java.util.Optional;
 
 
 public interface userRepos extends JpaRepository<User,Long> {
 
-    User findUsersByName(String username);
+    Optional<User> findUsersByName(String username);
 
     User findUserByEmailAndName
             (String email,String userName);

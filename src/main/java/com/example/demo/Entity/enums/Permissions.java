@@ -1,8 +1,8 @@
-package com.example.demo.Entity;
+package com.example.demo.Entity.enums;
 
 import org.springframework.security.core.GrantedAuthority;
 
-public enum Roles implements GrantedAuthority {
+public enum Permissions implements GrantedAuthority {
     USER, ADMIN;
 
     @Override

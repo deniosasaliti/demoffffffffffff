@@ -1,11 +1,10 @@
 package com.example.demo.config;
 
 
-
-import com.example.demo.providers.Provider;
-import com.example.demo.service.UserDetService;
+import com.example.demo.security.PrincipalDetailsService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -14,33 +13,25 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.web.FilterChainProxy;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.servlet.FilterChain;
+import java.beans.Encoder;
 
+
+@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@ComponentScan("com.example.demo.providers")
+@ComponentScan("com.example.demo.security.providers")
 public class SecurityConf  extends WebSecurityConfigurerAdapter {
 
-    final
-    Provider provider;
-    final
-    UserDetService userDetailsService;
 
-    public SecurityConf(Provider provider, UserDetService userDetailsService) {
+        final PrincipalDetailsService principalDetailsService;
 
-        this.provider = provider;
 
-        this.userDetailsService = userDetailsService;
-    }
+
 
 
     @Override
@@ -70,12 +61,14 @@ public class SecurityConf  extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder builder) throws Exception {
+        builder.userDetailsService(principalDetailsService)
+                .passwordEncoder(getEncoder());
+    }
 
-        auth.authenticationProvider(provider);
-
-
-
+    @Bean
+    public PasswordEncoder getEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
 }

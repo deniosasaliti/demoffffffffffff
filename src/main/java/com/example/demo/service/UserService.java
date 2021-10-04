@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.Entity.NotificationEmail;
+import com.example.demo.utilPojo.NotificationEmail;
 import com.example.demo.Entity.User;
 import com.example.demo.repos.userRepos;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 
 import javax.transaction.Transactional;
-import java.util.HashMap;
 import java.util.Map;
 
 @Service

@@ -1,7 +1,7 @@
-package com.example.demo.Entity;
+package com.example.demo.utilPojo;
 
 
-import javax.persistence.EntityManager;
+
 
 public class NotificationEmail {
     private String subject;

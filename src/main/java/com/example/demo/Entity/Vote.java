@@ -1,12 +1,21 @@
 package com.example.demo.Entity;
 
+import com.example.demo.Entity.enums.VoteType;
 import com.sun.istack.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name = "vote",schema = "my_scheme")
+@Table(name = "vote")
 public class Vote {
 
 
@@ -23,35 +32,5 @@ public class Vote {
     private User user;
 
 
-    public Long getVoteId() {
-        return voteId;
-    }
 
-    public void setVoteId(Long voteId) {
-        this.voteId = voteId;
-    }
-
-    public VoteType getVoteType() {
-        return voteType;
-    }
-
-    public void setVoteType(VoteType voteType) {
-        this.voteType = voteType;
-    }
-
-    public Post getPost() {
-        return post;
-    }
-
-    public void setPost(Post post) {
-        this.post = post;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 }

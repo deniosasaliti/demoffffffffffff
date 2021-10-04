@@ -1,15 +1,10 @@
 package com.example.demo.Dto;
 
-import com.example.demo.Entity.Categories;
-import com.example.demo.Entity.Post;
 import com.example.demo.Entity.User;
-import org.springframework.data.web.ProjectedPayload;
 
 
-import javax.persistence.Transient;
 import java.time.Instant;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 

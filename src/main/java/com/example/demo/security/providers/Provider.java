@@ -1,4 +1,4 @@
-package com.example.demo.providers;
+package com.example.demo.security.providers;
 import com.example.demo.Entity.User;
 import com.example.demo.repos.userRepos;
 import org.springframework.security.authentication.AuthenticationProvider;

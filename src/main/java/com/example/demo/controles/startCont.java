@@ -2,6 +2,7 @@ package com.example.demo.controles;
 
 import com.example.demo.Dto.PostDetail;
 import com.example.demo.Entity.*;
+import com.example.demo.Entity.enums.Categories;
 import com.example.demo.repos.*;
 import com.example.demo.service.MailService;
 import com.example.demo.service.PostService;

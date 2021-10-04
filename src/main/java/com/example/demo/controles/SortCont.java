@@ -1,15 +1,7 @@
 package com.example.demo.controles;
 
-import com.example.demo.Entity.Categories;
-import com.example.demo.Entity.Post;
 import com.example.demo.service.PostService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-
-import javax.jws.WebParam;
-import java.util.List;
 
 @Controller
 public class SortCont {
