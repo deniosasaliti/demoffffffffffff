@@ -1,45 +1,41 @@
 package com.example.demo.Entity;
 
-import com.example.demo.Entity.enums.VoteType;
-import com.sun.istack.NotNull;
 import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
 @Setter
 @ToString
+@RequiredArgsConstructor
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "vote")
-public class Vote {
-
+public class Actor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long vote_id;
-    private VoteType votetype;
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
-    @ToString.Exclude
-    private Post post;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    @ToString.Exclude
-    private User user;
-
+    private Long id;
+    private Date born;
+    private String image_url;
+    private String Occupation;
+    private String alma_mater;
+    @ElementCollection()
+    @CollectionTable(name = "award", joinColumns = @JoinColumn(name = "actor_id"))
+    private List<String> awards;
+    private String wiki_url;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Vote vote = (Vote) o;
-        return vote_id != null && Objects.equals(vote_id, vote.vote_id);
+        Actor actor = (Actor) o;
+        return id != null && Objects.equals(id, actor.id);
     }
 
     @Override

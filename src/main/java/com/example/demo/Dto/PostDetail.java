@@ -1,12 +1,14 @@
 package com.example.demo.Dto;
 
 import com.example.demo.Entity.User;
+import com.example.demo.Entity.enums.Permissions;
 
 
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.Set;
 
 public interface PostDetail {
 
@@ -19,7 +21,9 @@ public interface PostDetail {
          String getImage();
          String getPostName();
          Long getPostId();
-         Long getCommentCount();
+//         Long getCommentCount();
+
+
          DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime( FormatStyle.MEDIUM )
                  .withZone( ZoneId.systemDefault());
 

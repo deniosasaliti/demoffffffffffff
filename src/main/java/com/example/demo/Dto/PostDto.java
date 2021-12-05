@@ -3,6 +3,7 @@ package com.example.demo.Dto;
 import com.example.demo.Entity.User;
 
 import java.time.Instant;
+import java.util.function.Consumer;
 
 public class PostDto {
     String category;

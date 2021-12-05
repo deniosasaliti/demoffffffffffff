@@ -39,11 +39,11 @@ public class VoteService {
 
 
         Vote vote = new Vote();
-        vote.setVoteType(VoteType.UPVOTE);
+        vote.setVotetype(VoteType.UPVOTE);
         vote.setPost(post);
         vote.setUser(user);
         voteRepo.save(vote);
-        post.setVoteCount(post.getVoteCount()+1);
+        post.setVote_count(post.getVote_count()+1);
         return post;
 
     }
@@ -53,17 +53,17 @@ public class VoteService {
 
         Post post = postService.findByPostById(dto.getId());
         User user = ((User) authentication.getPrincipal());
-        Optional<Vote> voted = voteRepo.findByPostAndUserOrderByVoteIdDesc(post,user);
+        boolean voted = voteRepo.existsByPostAndUser(post,user);
 
-        if (voted.isPresent()){
+        if (voted){
             throw  new SpringRedditException("u a ready voted");
         }
         Vote vote = new Vote();
-        vote.setVoteType(VoteType.UPVOTE);
+        vote.setVotetype(VoteType.UPVOTE);
         vote.setPost(post);
         vote.setUser(user);
         voteRepo.save(vote);
-        post.setVoteCount(post.getVoteCount()-1);
+        post.setVote_count(post.getVote_count()-1);
         return post;
 
     }

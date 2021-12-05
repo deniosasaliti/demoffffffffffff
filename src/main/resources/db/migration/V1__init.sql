@@ -72,23 +72,21 @@ ALTER TABLE vote
 
 CREATE TABLE role
 (
-    role_id BIGINT AUTO_INCREMENT NOT NULL,
+    id BIGINT AUTO_INCREMENT NOT NULL,
     name    VARCHAR(255)          NULL,
-    CONSTRAINT pk_role PRIMARY KEY (role_id)
+    CONSTRAINT pk_role PRIMARY KEY (id)
 );
 
 
 create table permissions
 (
-   permission_id bigint auto_increment not null,
-   permission varchar(255) null,
-   role_id bigint null ,
-       CONSTRAINT  PRIMARY KEY (permission_id)
+  role_id bigint not null,
+   permissions varchar(255)
 );
 
 alter table permissions
-        add  constraint FK_PERMISSION_ON_ROLE foreign key (role_id) references role (role_id);
+        add  constraint FK_PERMISSION_ON_ROLE foreign key (role_id) references role (id);
 
 alter table user
-        add constraint FK_ROLE_ON_USER foreign key (role_id) references role(role_id);
+        add constraint FK_ROLE_ON_USER foreign key (role_id) references role(id) ;
 

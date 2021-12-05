@@ -14,18 +14,16 @@ import java.util.Map;
 public class UserService {
 
     final userRepos userRepository;
-    final TokenService tokenService;
-    final MailService mailService;
 
 
 
 
 
 
-    public UserService(userRepos userRepos, TokenService tokenService, MailService mailService) {
+
+    public UserService(userRepos userRepos) {
+
         this.userRepository = userRepos;
-        this.tokenService = tokenService;
-        this.mailService = mailService;
 
     }
 
@@ -54,19 +52,7 @@ public class UserService {
     }
 
 
-   @Transactional
-    public void saveUser(User user,Map<String,Object> model) throws Exception {
 
-        NotificationEmail notificationEmail = new NotificationEmail("please activate your account",
-                user.getEmail(),"http://localhost:8080/accountVerification/");
-        String token = tokenService.generateVerificationToken(user);
-        model.put("name",user.getName());
-        model.put("success",notificationEmail.getSuccessUrl()+token);
-       userRepository.save(user);
-        mailService.sendEmail(notificationEmail,model);
-
-
-    }
 
 
 

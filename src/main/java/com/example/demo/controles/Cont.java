@@ -84,7 +84,7 @@ public class Cont {
         }else
             throw  new NotAuthenticationException("u a not authenticated ");
 
-        response.setVoteCount(post.getVoteCount());
+        response.setVoteCount(post.getVote_count());
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
@@ -99,7 +99,7 @@ public class Cont {
             throw  new NotAuthenticationException("u a not authenticated ");
 
         PostResponseDto response = new PostResponseDto();
-        response.setVoteCount(post.getVoteCount());
+        response.setVoteCount(post.getVote_count());
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
@@ -125,18 +125,18 @@ public class Cont {
 
         Post post = new Post();
         post.setCategories(Categories.valueOf(categories));
-        post.setCreatedDate(Instant.now().truncatedTo(ChronoUnit.SECONDS));
+        post.setCreated_date(Instant.now().truncatedTo(ChronoUnit.SECONDS));
         post.setDescription(description);
         post.setImage(savedFileName);
-        post.setPostName(description);
+        post.setPost_name(description);
         post.setUser((User) authentication.getPrincipal());
         postService.save(post);
       return   new ResponseEntity<>(new PostDto(post.getCategories().name(),post.getUser().getId(),post.getDescription(),
               post.getUser().getName(),
-              post.getCreatedDate().toString(),
+              post.getCreated_date().toString(),
               post.getImage(),
-              post.getPostName(),
-              post.getPostId(),
+              post.getPost_name(),
+              post.getPost_id(),
               false),HttpStatus.OK);
     }
 

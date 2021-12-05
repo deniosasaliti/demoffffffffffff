@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface VoteRepo extends JpaRepository<Vote,Long> {
 
-    Optional<Vote> findByPostAndUserOrderByVoteIdDesc(Post post, User user);
+//    Optional<Vote> findByPostAndUserOrderByVote_idDesc(Post post, User user);
     boolean existsByPostAndUser(Post post,User user);
 
 }

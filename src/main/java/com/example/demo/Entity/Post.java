@@ -2,13 +2,18 @@ package com.example.demo.Entity;
 
 import com.example.demo.Entity.enums.Categories;
 import com.sun.istack.Nullable;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 
-
+@Getter
+@Setter
+@ToString
 @Entity
 @Table(name = "post")
 public class Post {
@@ -24,13 +29,13 @@ public class Post {
                 String image) {
 
         this.image = image;
-        this.postId = postId;
-        this.postName = postName;
+        this.post_id = postId;
+        this.post_name = postName;
         this.url = url;
         this.description = description;
-        this.voteCount = voteCount;
+        this.vote_count = voteCount;
         this.user = user;
-        this.createdDate = createdDate;
+        this.created_date = createdDate;
 
 
     }
@@ -40,24 +45,25 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long postId;
+    private Long post_id;
     @NotBlank(message = "Post Name cannot be empty or Null")
-    private String postName;
+    private String post_name;
     @Nullable
     private String url;
     @Nullable
     @Lob
     private String description;
-    private Integer voteCount = 0;
-    @ManyToOne(fetch = FetchType.EAGER)
+    private Integer vote_count = 0;
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-    private Instant createdDate;
+    private Instant created_date;
 
     private String image;
     @Enumerated(EnumType.STRING)
     private Categories categories;
     @OneToMany(mappedBy ="post",orphanRemoval = true,fetch = FetchType.LAZY)
+    @ToString.Exclude
     private List<Comment> comments;
 
 
@@ -77,83 +83,16 @@ public class Post {
     }
 
 
-    public Categories getCategories() {
-        return categories;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Post post = (Post) o;
+        return post_id != null && Objects.equals(post_id, post.post_id);
     }
 
-    public void setCategories(Categories categories) {
-        this.categories = categories;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public Long getPostId() {
-        return postId;
-    }
-
-    public void setPostId(Long postId) {
-        this.postId = postId;
-    }
-
-    public String getPostName() {
-        return postName;
-    }
-
-    public void setPostName(String postName) {
-        this.postName = postName;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Integer getVoteCount() {
-        return voteCount;
-    }
-
-    public void setVoteCount(Integer voteCount) {
-        this.voteCount = voteCount;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Instant getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Instant createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

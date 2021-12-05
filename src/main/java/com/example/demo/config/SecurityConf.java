@@ -52,21 +52,16 @@ public class SecurityConf  extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
+                .formLogin().disable()
+                .httpBasic().disable()
                 .authorizeRequests()
+                .antMatchers( "/swagger/**","/auth/**")
+                .permitAll();
 
-                .antMatchers("/login","/").permitAll()
-                .antMatchers("/successPage").authenticated()
-                        .and()
-                .formLogin()
-                .loginPage("/login")
-                .loginProcessingUrl("/login/process")
-                .failureUrl("/login?error=true")
-                .usernameParameter("name")
-                        .and()
-                .exceptionHandling()
-                .accessDeniedPage("/successPage")
-                        .and()
-                .logout();
+
+
+
+
         http.addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 

@@ -2,6 +2,10 @@ package com.example.demo.service;
 
 import com.example.demo.Entity.User;
 import com.example.demo.Entity.VerificationToken;
+import com.example.demo.Entity.Vote;
+import com.example.demo.repos.VerificationTokenRepo;
+import com.example.demo.repos.VoteRepo;
+import com.example.demo.repos.userRepos;
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -21,14 +25,25 @@ import org.springframework.test.context.junit4.SpringRunner;
 class UserServiceTest {
     @Autowired
     UserService service;
+    @Autowired
+    VerificationTokenRepo tokenRepo;
+    @Autowired
+    userRepos userRepository;
 
-    @BeforeEach
-    void setUp() {
+
+    @Test
+    void  someTest(){
+        VerificationToken token = tokenRepo.findById(1L).get();
     }
 
-    @AfterEach
-    void tearDown() {
+    @Test
+    void  someTest2(){
+        User user = userRepository.findById(1L).get();
     }
+
+
+
+
 
 
 
