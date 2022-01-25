@@ -88,5 +88,7 @@ alter table permissions
         add  constraint FK_PERMISSION_ON_ROLE foreign key (role_id) references role (id);
 
 alter table user
-        add constraint FK_ROLE_ON_USER foreign key (role_id) references role(id) ;
+        add constraint FK_ROLE_ON_USER foreign key (role_id) references role(id);
+
+
 

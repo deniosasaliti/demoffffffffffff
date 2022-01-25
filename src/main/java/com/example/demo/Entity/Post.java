@@ -58,10 +58,11 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
     private Instant created_date;
-
     private String image;
+
     @Enumerated(EnumType.STRING)
     private Categories categories;
+
     @OneToMany(mappedBy ="post",orphanRemoval = true,fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Comment> comments;

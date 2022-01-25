@@ -11,7 +11,6 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,6 +21,8 @@ public class Actor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Date born;
+    private String name;
+    private String urlImage;
     private String image_url;
     private String Occupation;
     private String alma_mater;

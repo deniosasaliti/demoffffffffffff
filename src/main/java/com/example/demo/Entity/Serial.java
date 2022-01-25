@@ -11,16 +11,14 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Serials {
+public class Serial {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-
     private Long id;
 
     private String original_name;
@@ -30,6 +28,9 @@ public class Serials {
     private String status;
 
     private String start_of_filming;
+
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "serial")
+    private List<AudioTrack> audioTracks;
 
     @ElementCollection()
     @CollectionTable(name = "country", joinColumns = @JoinColumn(name = "serial_id"))
@@ -57,7 +58,9 @@ public class Serials {
 
     @ElementCollection()
     @CollectionTable(name = "painter", joinColumns = @JoinColumn(name = "serial_id"))
-    private List<String > painters;
+    private List<String> painters;
+
+
 
     private Date premiere;
 
@@ -73,12 +76,22 @@ public class Serials {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Serials serials = (Serials) o;
-        return id != null && Objects.equals(id, serials.id);
+        Serial serial = (Serial) o;
+        return id != null && Objects.equals(id, serial.id);
     }
 
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    public void addAudioTrack(AudioTrack audioTrack) {
+        audioTracks.add(audioTrack);
+        audioTrack.setSerial(this);
+    }
+
+    public void removeAudioTrack(AudioTrack audioTrack) {
+        audioTracks.remove(audioTrack);
+        audioTrack.setSerial(null);
     }
 }
