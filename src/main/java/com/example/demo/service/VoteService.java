@@ -43,7 +43,7 @@ public class VoteService {
         vote.setPost(post);
         vote.setUser(user);
         voteRepo.save(vote);
-        post.setVote_count(post.getVote_count()+1);
+        post.setVoteCount(post.getVoteCount()+1);
         return post;
 
     }
@@ -63,7 +63,7 @@ public class VoteService {
         vote.setPost(post);
         vote.setUser(user);
         voteRepo.save(vote);
-        post.setVote_count(post.getVote_count()-1);
+        post.setVoteCount(post.getVoteCount()-1);
         return post;
 
     }

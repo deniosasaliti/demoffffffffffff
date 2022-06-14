@@ -1,18 +1,19 @@
 package com.example.demo.controles;
 
-import com.example.demo.Dto.CommentDto;
-import com.example.demo.Dto.PostDto;
-import com.example.demo.Dto.PostIdDto;
-import com.example.demo.Dto.PostResponseDto;
+import com.example.demo.Dto.*;
 import com.example.demo.Entity.*;
 import com.example.demo.Entity.enums.Categories;
 import com.example.demo.exceptions.NotAuthenticationException;
 import com.example.demo.repos.CommentsRepo;
 import com.example.demo.repos.PostRepo;
+import com.example.demo.repos.SerialRepository;
 import com.example.demo.service.AwsBucketService;
 import com.example.demo.service.PostService;
 import com.example.demo.service.VoteService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +27,11 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
+@RequestMapping("/cont")
 public class Cont {
 
 
@@ -36,6 +39,9 @@ public class Cont {
     private String uploadPath;
     @Value("${app.awsServices.bucketName}")
     private String bucketName;
+
+    final
+    SerialRepository serialRepository;
 
     final
     VoteService voteService;
@@ -55,7 +61,7 @@ public class Cont {
 
 
 
-    public Cont(VoteService voteService, PostService postService, CommentsRepo commentsRepo, PostRepo postRepo, AwsBucketService awsBucketService) {
+    public Cont(VoteService voteService, PostService postService, CommentsRepo commentsRepo, PostRepo postRepo, AwsBucketService awsBucketService, SerialRepository serialRepository) {
         this.voteService = voteService;
 
         this.postService = postService;
@@ -63,6 +69,7 @@ public class Cont {
         this.commentsRepo = commentsRepo;
         this.postRepo = postRepo;
         this.awsBucketService = awsBucketService;
+        this.serialRepository = serialRepository;
     }
 
 
@@ -84,7 +91,7 @@ public class Cont {
         }else
             throw  new NotAuthenticationException("u a not authenticated ");
 
-        response.setVoteCount(post.getVote_count());
+        response.setVoteCount(post.getVoteCount());
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
@@ -99,7 +106,7 @@ public class Cont {
             throw  new NotAuthenticationException("u a not authenticated ");
 
         PostResponseDto response = new PostResponseDto();
-        response.setVoteCount(post.getVote_count());
+        response.setVoteCount(post.getVoteCount());
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
@@ -125,18 +132,18 @@ public class Cont {
 
         Post post = new Post();
         post.setCategories(Categories.valueOf(categories));
-        post.setCreated_date(Instant.now().truncatedTo(ChronoUnit.SECONDS));
+        post.setCreatedDate(Instant.now().truncatedTo(ChronoUnit.SECONDS));
         post.setDescription(description);
         post.setImage(savedFileName);
-        post.setPost_name(description);
+        post.setPostName(description);
         post.setUser((User) authentication.getPrincipal());
         postService.save(post);
       return   new ResponseEntity<>(new PostDto(post.getCategories().name(),post.getUser().getId(),post.getDescription(),
               post.getUser().getName(),
-              post.getCreated_date().toString(),
+              post.getCreatedDate().toString(),
               post.getImage(),
-              post.getPost_name(),
-              post.getPost_id(),
+              post.getPostName(),
+              post.getId(),
               false),HttpStatus.OK);
     }
 
@@ -166,8 +173,15 @@ public class Cont {
         }
         return "";
     }
+    @GetMapping("/getFrontPageInfo")
+    public ResponseEntity<List<SerialFrontPageInfo>> getSerialsById(){
 
+        List<SerialFrontPageInfo> pageInfos =
+                serialRepository.findAllBy(PageRequest.of(0,2));
+        return new ResponseEntity<>(pageInfos,HttpStatus.OK);
     }
+
+}
 
 
 

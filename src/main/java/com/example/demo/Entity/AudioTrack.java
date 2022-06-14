@@ -1,12 +1,12 @@
 package com.example.demo.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
 
 @Getter
 @Setter
-@ToString
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,5 +20,6 @@ public class AudioTrack {
     private String  name;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
     private Serial serial;
 }

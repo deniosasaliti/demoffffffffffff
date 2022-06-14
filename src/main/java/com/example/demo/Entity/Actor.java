@@ -1,12 +1,13 @@
 package com.example.demo.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.event.ContextStartedEvent;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Getter
 @Setter
@@ -22,25 +23,24 @@ public class Actor {
     private Long id;
     private Date born;
     private String name;
-    private String urlImage;
-    private String image_url;
-    private String Occupation;
-    private String alma_mater;
+    private String imageUrl;
+
+    private String almaMater;
     @ElementCollection()
     @CollectionTable(name = "award", joinColumns = @JoinColumn(name = "actor_id"))
     private List<String> awards;
-    private String wiki_url;
+    private String wikiUrl;
+    private String shortAboutActor;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Actor actor = (Actor) o;
-        return id != null && Objects.equals(id, actor.id);
-    }
 
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
+
+
+    @ManyToMany(mappedBy = "actors")
+//    @JsonBackReference
+    private Set<Serial> serial = new HashSet<>();
+
+
+
+
+
 }

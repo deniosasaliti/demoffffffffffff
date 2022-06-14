@@ -4,12 +4,14 @@ package com.example.demo.config;
 import com.example.demo.security.JwtAuthenticationFilter;
 import com.example.demo.security.PrincipalDetailsService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -17,6 +19,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,6 +37,7 @@ public class SecurityConf  extends WebSecurityConfigurerAdapter {
 
 
         final PrincipalDetailsService principalDetailsService;
+        final AuthenticationProvider authenticationProvider;
 
 
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
@@ -50,13 +54,13 @@ public class SecurityConf  extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()
+        http.cors().and()
+                .csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .formLogin().disable()
                 .httpBasic().disable()
                 .authorizeRequests()
-                .antMatchers( "/swagger/**","/auth/**")
-                .permitAll();
+                .antMatchers( "/auth/**").permitAll()
+                .anyRequest().authenticated();
 
 
 
@@ -67,18 +71,25 @@ public class SecurityConf  extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/static/js**");
-    }
-
-    @Autowired
-    protected void configure(AuthenticationManagerBuilder builder) throws Exception {
-        builder.userDetailsService(principalDetailsService)
-                .passwordEncoder(getEncoder());
+        web.ignoring().antMatchers("/static/js**","/v3/api-docs",
+                "/configuration/ui",
+                "/swagger-resources/**",
+                "/configuration/security",
+                "/swagger-ui.html",
+                "/webjars/**",
+                "/v2/api-docs");
     }
 
     @Bean
     public PasswordEncoder getEncoder() {
         return new BCryptPasswordEncoder();
     }
+    @Autowired
+    protected void configureGlobal(AuthenticationManagerBuilder builder) throws Exception {
+        builder.userDetailsService(principalDetailsService)
+                .passwordEncoder(getEncoder());
+    }
+
+
 
 }

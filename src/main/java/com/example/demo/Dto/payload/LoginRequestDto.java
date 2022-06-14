@@ -10,10 +10,9 @@ public class LoginRequestDto {
 
 
     @NotBlank
-    @Email
-    private String email;
+    private String name;
 
     @NotBlank
-    @Size(min = 8, max = 14, message = "Password length must be from 8 to 14 symbols")
+//    @Size(min = 8, max = 14, message = "Password length must be from 8 to 14 symbols")
     private String password;
 }

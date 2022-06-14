@@ -17,6 +17,9 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 @Data
@@ -38,18 +41,25 @@ public class User  {
         @Size(max = 10 )
         private String name;
 
-        @NotBlank(message = "a u IDIOT?")
-        @Email(message = "a u IDIOT?")
+
         @Column(name = "email")
         private String email;
 
-        @NotBlank(message = "a u IDIOT?")
+
         @Column(name = "password")
         private String password;
 
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn( name = "role_id")
         private Role role;
+
+        @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+        @JoinTable(name = "serial_user",
+                joinColumns = @JoinColumn(name = "user_id"),
+                inverseJoinColumns = @JoinColumn(name = "serial_id")
+        )
+        private Set<Serial> serials = new HashSet<>();
+
 }
 
 

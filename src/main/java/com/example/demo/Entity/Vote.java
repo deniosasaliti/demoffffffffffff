@@ -21,7 +21,7 @@ public class Vote {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long vote_id;
+    private Long id;
     private VoteType votetype;
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
@@ -39,7 +39,7 @@ public class Vote {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         Vote vote = (Vote) o;
-        return vote_id != null && Objects.equals(vote_id, vote.vote_id);
+        return id != null && Objects.equals(id, vote.id);
     }
 
     @Override

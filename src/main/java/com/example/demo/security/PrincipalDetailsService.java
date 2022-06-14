@@ -30,7 +30,7 @@ public class PrincipalDetailsService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserById(Long id) {
         User user = userRepository.findById(id).orElseThrow(
-                () -> new UsernameNotFoundException("user by " + id + "not found")
+                () -> new UsernameNotFoundException("user by id " + id + " not found")
         );
         return PrincipalDetails.create(user);
     }

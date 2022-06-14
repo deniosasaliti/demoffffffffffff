@@ -1,5 +1,6 @@
 package com.example.demo.repos;
 
+import com.example.demo.Dto.PostD2;
 import com.example.demo.Dto.PostDetail;
 import com.example.demo.Entity.enums.Categories;
 import com.example.demo.Entity.Post;
@@ -14,12 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface PostRepo extends JpaRepository<Post,Long> {
     @Modifying
-    @Query("update Post p set p.vote_count = p.vote_count +1 where p.post_id = :id")
+    @Query("update Post p set p.voteCount = p.voteCount +1 where p.id = :id")
     public void updateCounterUp(@Param("id") Long id);
 
 
     @Modifying
-    @Query("update Post p set p.vote_count = p.vote_count -1 where p.post_id = :id")
+    @Query("update Post p set p.voteCount = p.voteCount -1 where p.id = :id")
     public void updateCounterDown(@Param("id") Long id);
 
 
@@ -38,19 +39,23 @@ public interface PostRepo extends JpaRepository<Post,Long> {
 //    List<PostDto> findAllPostsByCategoriesAndCommentsCount(@Param("categories") Categories categories,
 //                                                           Pageable pageable);
     @Transactional
-    @Query(value = "select p.categories as categories,p.url as url,p.description as description,p.vote_count as voteCount,p.user as user,p.created_date as createdDate,p.image as image,p.post_name as postName,p.post_id as postId,count (c) as commentCount" +
+    @Query(value = "select p.categories as categories,p.url as url,p.description as description,p.voteCount as voteCount,p.user as user,p.createdDate as createdDate,p.image as image,p.postName as postName,p.id as postId,count (c) as commentCount" +
             "  from Post p   " +
             "   left  join  p.comments c where p.categories = :category group by p")
     Page<PostDetail> findAllPostsByCategoryAndCommentsCount(@Param("category") Categories category,
                                                                 Pageable pageable);
 
     @Transactional
-    @Query(value = "select p.categories as categories,p.url as url,p.description as description,p.vote_count as voteCount,p.user  as user ,p.created_date as createdDate,p.image as image,p.post_name as postName,p.post_id as postId,count (c) as commentCount" +
+    @Query(value = "select p.categories as categories,p.url as url,p.description as description,p.voteCount as voteCount,p.user  as user ,p.createdDate as createdDate,p.image as image,p.postName as postName,p.id as postId,count (c) as commentCount" +
             " from Post p" +
             " left join  p.comments c  group by p")
     Page<PostDetail> findAllPostsByCategoryAndCommentsCount(Pageable pageable);
     
+    @Query(value = "select p from Post p join fetch p.comments where p.id = :id")
+    PostDetail getAllPost(long id);
 
+
+    Post getAllById(long id);
 
 
 

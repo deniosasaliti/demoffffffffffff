@@ -1,12 +1,12 @@
 package com.example.demo.Entity;
 
+import com.example.demo.Dto.SerialFrontPageInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Getter
 @Setter
@@ -15,22 +15,48 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Serial {
+
+//@NamedEntityGraph(
+//        name = "serial-entity-graph",
+//        attributeNodes = {
+//                @NamedAttributeNode("id"),
+//                @NamedAttributeNode("audioTracks"),
+//        }
+//)
+public class Serial  {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
-    private String original_name;
+    private String originalName;
 
     private String rating;
 
     private String status;
 
-    private String start_of_filming;
+    private String startOfFilming;
+
+    private Date premiere;
+
+    private String imageUrl;
+
+    private String youtubeTrailerUrl;
+
+    @Column(columnDefinition="TEXT")
+    private String description;
 
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "serial")
+    @JsonManagedReference
     private List<AudioTrack> audioTracks;
+
+    @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.MERGE,CascadeType.PERSIST})
+    @JoinTable(name = "serial_actor",
+            joinColumns = @JoinColumn(name = "serial_id"),
+            inverseJoinColumns = @JoinColumn(name = "actor_id")
+    )
+//    @JsonManagedReference
+    private Set<Actor> actors = new HashSet<>();
 
     @ElementCollection()
     @CollectionTable(name = "country", joinColumns = @JoinColumn(name = "serial_id"))
@@ -62,14 +88,9 @@ public class Serial {
 
 
 
-    private Date premiere;
 
-    private String image_url;
 
-    private String youtube_trailer_url;
 
-    @Column(columnDefinition="TEXT")
-    private String description;
 
 
     @Override

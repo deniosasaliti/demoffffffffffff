@@ -8,8 +8,7 @@ import org.hibernate.Hibernate;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.Instant;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Getter
 @Setter
@@ -29,13 +28,13 @@ public class Post {
                 String image) {
 
         this.image = image;
-        this.post_id = postId;
-        this.post_name = postName;
+        this.id = postId;
+        this.postName = postName;
         this.url = url;
         this.description = description;
-        this.vote_count = voteCount;
+        this.voteCount = voteCount;
         this.user = user;
-        this.created_date = createdDate;
+        this.createdDate = createdDate;
 
 
     }
@@ -45,29 +44,32 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long post_id;
+    private Long id;
     @NotBlank(message = "Post Name cannot be empty or Null")
-    private String post_name;
+    private String postName;
     @Nullable
     private String url;
     @Nullable
     @Lob
     private String description;
-    private Integer vote_count = 0;
+    private Integer voteCount = 0;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-    private Instant created_date;
+    private Instant createdDate;
     private String image;
 
     @Enumerated(EnumType.STRING)
     private Categories categories;
 
-    @OneToMany(mappedBy ="post",orphanRemoval = true,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy ="post",orphanRemoval = true,fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @ToString.Exclude
-    private List<Comment> comments;
+    private List<Comment> comments = new ArrayList<>();
 
 
+
+    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    Set<Tag> tags = new HashSet<>();
 
 
 
@@ -89,7 +91,7 @@ public class Post {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         Post post = (Post) o;
-        return post_id != null && Objects.equals(post_id, post.post_id);
+        return id != null && Objects.equals(id, post.id);
     }
 
     @Override

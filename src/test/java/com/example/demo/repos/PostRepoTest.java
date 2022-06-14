@@ -1,6 +1,10 @@
 package com.example.demo.repos;
 
 import com.example.demo.Dto.PostDetail;
+import com.example.demo.Entity.Comment;
+import com.example.demo.Entity.Post;
+import com.example.demo.Entity.Tag;
+import com.example.demo.Entity.enums.Categories;
 import com.example.demo.Entity.enums.Permissions;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -20,6 +24,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class PostRepoTest {
     @Autowired
     PostRepo postRepo;
+
+    @Autowired
+    TagRepositpry tagRepositpry;
 
     @Test
     void updateCounterUp() {
@@ -54,5 +61,40 @@ class PostRepoTest {
 //        Assertions.assertEquals(3,content.size());
 //        Assertions.assertNotNull(content.get(0).getUser().getRole());
 //        System.out.println(content.get(0).getUser().getRole().getPermissions());
+        System.out.println(content);
+
     }
+
+
+    @Test
+    void savePostTags() {
+
+        Post post = new Post();
+        Tag tag = new Tag();
+        post.getTags().add(tag);
+        post.setCategories(Categories.EVIL);
+
+        postRepo.save(post);
+
+    }
+
+
+    @Test
+    void savePostCommends() {
+        Post post = new Post();
+        Comment comment = new Comment();
+        comment.setPost(post);
+        post.getComments().add(comment);
+        postRepo.save(post);
+    }
+
+
+//    @Test
+//    void newTest(){
+//        Post allPost = postRepo.getAllPost(4);
+//        System.out.println(allPost.getComments());
+//
+//    }
+
+
 }

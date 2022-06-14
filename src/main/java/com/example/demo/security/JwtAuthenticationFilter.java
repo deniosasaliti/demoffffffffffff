@@ -1,10 +1,17 @@
 package com.example.demo.security;
 
+import com.example.demo.exceptions.SpringRedditException;
+import com.example.demo.service.AuthService;
+import io.jsonwebtoken.ExpiredJwtException;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -15,28 +22,44 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
-@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
+    @Autowired
     private TokenProvider tokenProvider;
+
+    @Autowired
+    AuthService authService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
+
+
         try {
-        String token = tokenProvider.resolveToken(httpServletRequest);
+            String token = tokenProvider.resolveToken(httpServletRequest);
 
-        if (token != null && tokenProvider.validateToken(token)){
-            Long userIdFromToken = tokenProvider.getUserIdFromToken(token);
-            Authentication auth = tokenProvider.getAuth(userIdFromToken);
-            SecurityContextHolder.getContext().setAuthentication(auth);
+            if (token != null && tokenProvider.validateToken(token)) {
+                Long userIdFromToken = tokenProvider.getUserIdFromToken(token);
+                Authentication auth = tokenProvider.getAuth(userIdFromToken);
 
+                SecurityContextHolder.getContext().setAuthentication(auth);
+
+            }
+
+
+            }catch (ExpiredJwtException e){
+
+            logger.error("token expired or invalid");
         }
-        } catch (Exception ex) {
-        }
-        filterChain.doFilter(httpServletRequest,httpServletResponse);
+
+            filterChain.doFilter(httpServletRequest, httpServletResponse);
+
+
     }
 
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        return (new AntPathMatcher().match("/auth/**", request.getServletPath()));
 
 
+    }
 }
 
