@@ -1,4 +1,4 @@
-package com.example.demo.Dto;
+package com.example.demo.Dto.Serial;
 
 import com.example.demo.Entity.Actor;
 

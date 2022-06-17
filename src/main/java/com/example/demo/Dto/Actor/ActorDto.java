@@ -1,14 +1,7 @@
-package com.example.demo.Dto;
+package com.example.demo.Dto.Actor;
 
-import com.example.demo.Entity.Actor;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import com.example.demo.Dto.Serial.SerialNameSlimDto;
 
-import javax.persistence.CollectionTable;
-import javax.persistence.ElementCollection;
-import javax.persistence.JoinColumn;
-import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 

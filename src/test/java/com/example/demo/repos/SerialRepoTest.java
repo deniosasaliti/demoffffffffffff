@@ -1,22 +1,18 @@
 package com.example.demo.repos;
 
-import com.example.demo.Dto.*;
+import com.example.demo.Dto.Audio.AudioDto;
+import com.example.demo.Dto.Serial.SerialD2;
+import com.example.demo.Dto.Serial.SerialFrontPageInfo;
 import com.example.demo.Entity.Actor;
 import com.example.demo.Entity.Post;
 import com.example.demo.Entity.Serial;
-import com.example.demo.Entity.User;
 import com.example.demo.service.SerialService;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -158,8 +154,8 @@ public class SerialRepoTest {
     @Transactional
     @Test
     public void getSerialByActors(){
-        userRepository.sssss(1);
-
+        List<SerialFrontPageInfo> allSerialsByUserId = serialRepository.getAllSerialsByUserId(2);
+        Assertions.assertEquals(5,allSerialsByUserId.size());
     }
 
 }

@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.Dto.CommentDto;
+import com.example.demo.Dto.Comment.CommentDto;
 import com.example.demo.Entity.enums.Categories;
 import com.example.demo.Entity.Comment;
 import com.example.demo.Entity.Post;

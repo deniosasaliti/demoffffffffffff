@@ -1,6 +1,10 @@
 package com.example.demo.controles;
 
-import com.example.demo.Dto.*;
+import com.example.demo.Dto.Comment.CommentDto;
+import com.example.demo.Dto.Post.PostDto;
+import com.example.demo.Dto.Post.PostIdDto;
+import com.example.demo.Dto.Post.PostResponseDto;
+import com.example.demo.Dto.Serial.SerialFrontPageInfo;
 import com.example.demo.Entity.*;
 import com.example.demo.Entity.enums.Categories;
 import com.example.demo.exceptions.NotAuthenticationException;
@@ -9,11 +13,10 @@ import com.example.demo.repos.PostRepo;
 import com.example.demo.repos.SerialRepository;
 import com.example.demo.service.AwsBucketService;
 import com.example.demo.service.PostService;
+import com.example.demo.service.SerialService;
 import com.example.demo.service.VoteService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -59,9 +62,11 @@ public class Cont {
     final
     AwsBucketService awsBucketService;
 
+    final SerialService serialService;
 
 
-    public Cont(VoteService voteService, PostService postService, CommentsRepo commentsRepo, PostRepo postRepo, AwsBucketService awsBucketService, SerialRepository serialRepository) {
+
+    public Cont(VoteService voteService, PostService postService, CommentsRepo commentsRepo, PostRepo postRepo, AwsBucketService awsBucketService, SerialRepository serialRepository, SerialService serialService) {
         this.voteService = voteService;
 
         this.postService = postService;
@@ -70,6 +75,7 @@ public class Cont {
         this.postRepo = postRepo;
         this.awsBucketService = awsBucketService;
         this.serialRepository = serialRepository;
+        this.serialService = serialService;
     }
 
 
@@ -179,6 +185,13 @@ public class Cont {
         List<SerialFrontPageInfo> pageInfos =
                 serialRepository.findAllBy(PageRequest.of(0,2));
         return new ResponseEntity<>(pageInfos,HttpStatus.OK);
+    }
+
+
+    @PostMapping("/getAllSerialById")
+    public ResponseEntity<List<SerialFrontPageInfo>> getSerialByUserId(@RequestParam long id){
+        List<SerialFrontPageInfo> allSerialsByUserId = serialService.getAllSerialsByUserId(id);
+        return new ResponseEntity<>(allSerialsByUserId,HttpStatus.OK);
     }
 
 }

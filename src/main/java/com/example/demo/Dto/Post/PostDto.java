@@ -1,4 +1,4 @@
-package com.example.demo.Dto;
+package com.example.demo.Dto.Post;
 
 import com.example.demo.Entity.User;
 

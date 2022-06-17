@@ -1,15 +1,14 @@
 package com.example.demo.service;
-import com.example.demo.Dto.ActorDto;
-import com.example.demo.Dto.AudioD2;
-import com.example.demo.Dto.SerialD2;
-import com.example.demo.Entity.Actor;
-import com.example.demo.Entity.Serial;
+import com.example.demo.Dto.Actor.ActorDto;
+import com.example.demo.Dto.Audio.AudioD2;
+import com.example.demo.Dto.Serial.SerialD2;
+import com.example.demo.Dto.Serial.SerialFrontPageInfo;
 import com.example.demo.repos.ActorRepository;
 import com.example.demo.repos.AudiRepository;
 import com.example.demo.repos.SerialRepository;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
@@ -38,6 +37,14 @@ public class SerialService {
         serialSlim.setAudioTracks(audiosSlim);
         return serialSlim;
     }
+
+    @Transactional
+    public List<SerialFrontPageInfo> getAllSerialsByUserId(long id){
+        return serialRepository.getAllSerialsByUserId(id);
+    }
+
+
+
 
 
 

@@ -1,12 +1,10 @@
 package com.example.demo.repos;
 
-import com.example.demo.Dto.PostDetail;
+import com.example.demo.Dto.Post.PostDetail;
 import com.example.demo.Entity.Comment;
 import com.example.demo.Entity.Post;
 import com.example.demo.Entity.Tag;
 import com.example.demo.Entity.enums.Categories;
-import com.example.demo.Entity.enums.Permissions;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 class PostRepoTest {

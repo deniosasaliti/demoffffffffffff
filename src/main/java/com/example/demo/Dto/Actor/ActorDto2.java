@@ -1,5 +1,6 @@
-package com.example.demo.Dto;
+package com.example.demo.Dto.Actor;
 
+import com.example.demo.Dto.Serial.SerialD2;
 import lombok.Getter;
 import lombok.Setter;
 

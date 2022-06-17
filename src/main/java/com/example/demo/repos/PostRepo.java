@@ -1,7 +1,6 @@
 package com.example.demo.repos;
 
-import com.example.demo.Dto.PostD2;
-import com.example.demo.Dto.PostDetail;
+import com.example.demo.Dto.Post.PostDetail;
 import com.example.demo.Entity.enums.Categories;
 import com.example.demo.Entity.Post;
 import org.springframework.data.domain.Page;

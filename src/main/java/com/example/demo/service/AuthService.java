@@ -1,19 +1,18 @@
 package com.example.demo.service;
 
-import com.example.demo.Dto.RefreshTokenRequest;
+import com.example.demo.Dto.payload.RefreshTokenRequest;
 import com.example.demo.Dto.payload.AuthResponseDto;
 import com.example.demo.Dto.payload.LoginRequestDto;
 import com.example.demo.Dto.payload.SignUpRequestDto;
 import com.example.demo.Entity.RefreshToken;
+import com.example.demo.Entity.Role;
 import com.example.demo.Entity.User;
+import com.example.demo.repos.RoleRepository;
 import com.example.demo.repos.userRepos;
 import com.example.demo.security.TokenProvider;
-import com.example.demo.utilPojo.NotificationEmail;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,14 +20,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.transaction.Transactional;
-import javax.validation.Valid;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.Instant;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +39,11 @@ public class AuthService {
     final PasswordEncoder passwordEncoder;
 
     final RefreshTokenService refreshTokenService;
+
+    final RoleRepository roleRepository;
+
+    @Value("${token.expired.time}")
+    private long tokenExpireTime;
 
 
 
@@ -62,7 +63,7 @@ public class AuthService {
         String token = tokenProvider.createToken(authentication);
         AuthResponseDto authResponseDto = AuthResponseDto.builder()
         .token(token)
-        .expireTime(Date.from(Instant.now().plusMillis(30000)))
+        .expireTime(Date.from(Instant.now().plusMillis(tokenExpireTime)))
                 .userId(userForID.getId())
                 .refreshToken(refreshToken.getToken())
                 .build();
@@ -83,7 +84,7 @@ public class AuthService {
                 .token(token)
                 .refreshToken(refreshToken.getToken())
                 .userId(refreshTokenRequest.getUserId())
-                .expireTime(Date.from(Instant.now().plusMillis(30000)))
+                .expireTime(Date.from(Instant.now().plusMillis(tokenExpireTime)))
                 .build();
     }
 
@@ -93,12 +94,17 @@ public class AuthService {
     @Transactional
     public void signup(SignUpRequestDto signUpRequestDto) throws Exception {
 
+        Role role = new Role();
+        role.setName("userRole");
+        roleRepository.save(role);
         User user = new User();
+        user.setRole(role);
         user.setEmail(signUpRequestDto.getEmail());
         user.setName(signUpRequestDto.getUsername());
         user.setEmail(signUpRequestDto.getEmail());
         user.setPassword(passwordEncoder.encode(signUpRequestDto.getPassword()));
         userRepository.save(user);
+
 
 
         String token = tokenService.generateVerificationToken(user);

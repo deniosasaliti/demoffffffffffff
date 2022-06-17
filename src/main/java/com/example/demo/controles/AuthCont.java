@@ -1,31 +1,19 @@
 package com.example.demo.controles;
 
 
-import com.example.demo.Dto.RefreshTokenRequest;
-import com.example.demo.Dto.SerialD2;
-import com.example.demo.Dto.SerialInfoDto;
+import com.example.demo.Dto.payload.RefreshTokenRequest;
+import com.example.demo.Dto.Serial.SerialD2;
 import com.example.demo.Dto.payload.AuthResponseDto;
 import com.example.demo.Dto.payload.LoginRequestDto;
 import com.example.demo.Dto.payload.SignUpRequestDto;
-import com.example.demo.Entity.AudioTrack;
-import com.example.demo.Entity.RefreshToken;
-import com.example.demo.Entity.Serial;
 import com.example.demo.repos.SerialRepository;
-import com.example.demo.security.TokenProvider;
 import com.example.demo.service.AuthService;
 import com.example.demo.service.RefreshTokenService;
 import com.example.demo.service.SerialService;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.Date;
-import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
@@ -36,6 +24,7 @@ public class AuthCont {
     private final SerialRepository serialRepository;
     final SerialService serialService;
     final RefreshTokenService refreshTokenService;
+
 
 
 

@@ -1,6 +1,5 @@
 package com.example.demo.Entity;
 
-import com.example.demo.Dto.SerialFrontPageInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -31,8 +30,6 @@ public class Serial  {
 
     private String originalName;
 
-    private String rating;
-
     private String status;
 
     private String startOfFilming;
@@ -49,6 +46,9 @@ public class Serial  {
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "serial")
     @JsonManagedReference
     private List<AudioTrack> audioTracks;
+
+
+
 
     @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.MERGE,CascadeType.PERSIST})
     @JoinTable(name = "serial_actor",
@@ -85,6 +85,10 @@ public class Serial  {
     @ElementCollection()
     @CollectionTable(name = "painter", joinColumns = @JoinColumn(name = "serial_id"))
     private List<String> painters;
+
+    @ManyToMany(mappedBy = "serials")
+    private Set<User> users = new HashSet<>();
+
 
 
 
