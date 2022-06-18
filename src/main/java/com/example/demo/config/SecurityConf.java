@@ -31,7 +31,9 @@ import java.beans.Encoder;
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity( prePostEnabled = true,
+        securedEnabled = true,
+        jsr250Enabled = true)
 @ComponentScan("com.example.demo.security.providers")
 public class SecurityConf  extends WebSecurityConfigurerAdapter {
 

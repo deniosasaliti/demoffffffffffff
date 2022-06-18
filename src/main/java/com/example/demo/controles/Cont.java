@@ -4,6 +4,7 @@ import com.example.demo.Dto.Comment.CommentDto;
 import com.example.demo.Dto.Post.PostDto;
 import com.example.demo.Dto.Post.PostIdDto;
 import com.example.demo.Dto.Post.PostResponseDto;
+import com.example.demo.Dto.Serial.SerialD2;
 import com.example.demo.Dto.Serial.SerialFrontPageInfo;
 import com.example.demo.Entity.*;
 import com.example.demo.Entity.enums.Categories;
@@ -20,10 +21,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.security.RolesAllowed;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -179,19 +183,26 @@ public class Cont {
         }
         return "";
     }
+    @Secured("ROLE_USER")
     @GetMapping("/getFrontPageInfo")
     public ResponseEntity<List<SerialFrontPageInfo>> getSerialsById(){
 
         List<SerialFrontPageInfo> pageInfos =
-                serialRepository.findAllBy(PageRequest.of(0,2));
+                serialRepository.findAllBy(PageRequest.of(0,30));
         return new ResponseEntity<>(pageInfos,HttpStatus.OK);
     }
 
 
-    @PostMapping("/getAllSerialById")
+    @PostMapping("/getAllSerialByIdForSideBar")
     public ResponseEntity<List<SerialFrontPageInfo>> getSerialByUserId(@RequestParam long id){
         List<SerialFrontPageInfo> allSerialsByUserId = serialService.getAllSerialsByUserId(id);
         return new ResponseEntity<>(allSerialsByUserId,HttpStatus.OK);
+    }
+
+    @PostMapping("/getAllSerialById")
+    public ResponseEntity<SerialD2> getSerialById(@RequestParam long id){
+        SerialD2 serial = serialService.getSerialByIdFetchAudios(id);
+        return new ResponseEntity<>(serial,HttpStatus.OK);
     }
 
 }

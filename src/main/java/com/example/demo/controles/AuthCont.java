@@ -13,6 +13,7 @@ import com.example.demo.service.SerialService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -29,9 +30,8 @@ public class AuthCont {
 
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponseDto> authUser(@RequestBody LoginRequestDto loginRequestDto){
-        System.out.println(loginRequestDto);
-        return authService.login(loginRequestDto);
+    public ResponseEntity<AuthResponseDto> authUser(@RequestBody LoginRequestDto loginRequestDto) {
+            return authService.login(loginRequestDto);
     }
 
 
@@ -52,13 +52,7 @@ public class AuthCont {
         return ResponseEntity.status(HttpStatus.OK).body("refresh token deleted ");
     }
 
-    @PostMapping("/getPostById")
-    public ResponseEntity<SerialD2> getSerialById(@RequestParam long id){
-        SerialD2 serial = serialService.getSerialByIdFetchAudios(id);
 
-
-        return new ResponseEntity<>(serial,HttpStatus.OK);
-    }
 
 
 

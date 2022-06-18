@@ -17,14 +17,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -47,17 +52,22 @@ public class AuthService {
 
 
 
-    public ResponseEntity<AuthResponseDto> login(LoginRequestDto loginRequestDto){
+    public ResponseEntity<AuthResponseDto> login(LoginRequestDto loginRequestDto) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
 
                         loginRequestDto.getName(),
                         loginRequestDto.getPassword()
+
+
                 )
         );
 
-        User userForID = userRepository.findByName(loginRequestDto.getName());
+        User userForID = userRepository.findByName(loginRequestDto.getName())
+                .orElseThrow(()-> new UsernameNotFoundException("user by username " +
+                        loginRequestDto.getName() + " not found"));
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
         RefreshToken refreshToken = refreshTokenService.createToken();
         String token = tokenProvider.createToken(authentication);

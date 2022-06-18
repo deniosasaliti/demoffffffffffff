@@ -7,14 +7,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+
 @Service
 @RequiredArgsConstructor
 public class TokenProvider {
@@ -35,7 +35,7 @@ public class TokenProvider {
 
 
         Claims claims = Jwts.claims().setSubject(principalDetails.getId().toString());
-//        claims.put("Permissions",principalDetails.getAuthorities().toString());
+//        claims.put("roles",principalDetails.getAuthorities().toString());
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(Date.from(Instant.now()))
@@ -62,7 +62,7 @@ public class TokenProvider {
 
     public Authentication getAuth(Long id){
         UserDetails userDetails = principalDetailsService.loadUserById(id);
-        return new UsernamePasswordAuthenticationToken(userDetails.getUsername(),userDetails.getPassword(),null);
+        return new UsernamePasswordAuthenticationToken(userDetails,"",userDetails.getAuthorities());
 
     }
 
