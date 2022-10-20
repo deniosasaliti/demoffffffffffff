@@ -1,7 +1,9 @@
 package com.example.demo.validation;
 
 import com.example.demo.service.ValidatorService;
-import javax.validation.*;
+
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 
 public class UniqueUserNameValidator implements ConstraintValidator<UniqueUserName,String> {
 

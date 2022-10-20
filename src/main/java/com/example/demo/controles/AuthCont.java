@@ -1,20 +1,20 @@
 package com.example.demo.controles;
 
 
-import com.example.demo.Dto.payload.RefreshTokenRequest;
-import com.example.demo.Dto.Serial.SerialD2;
 import com.example.demo.Dto.payload.AuthResponseDto;
 import com.example.demo.Dto.payload.LoginRequestDto;
+import com.example.demo.Dto.payload.RefreshTokenRequest;
 import com.example.demo.Dto.payload.SignUpRequestDto;
-import com.example.demo.repos.SerialRepository;
 import com.example.demo.service.AuthService;
 import com.example.demo.service.RefreshTokenService;
 import com.example.demo.service.SerialService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthCont {
 
     private final AuthService authService;
-    private final SerialRepository serialRepository;
+
     final SerialService serialService;
     final RefreshTokenService refreshTokenService;
 

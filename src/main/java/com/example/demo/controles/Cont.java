@@ -6,28 +6,28 @@ import com.example.demo.Dto.Post.PostIdDto;
 import com.example.demo.Dto.Post.PostResponseDto;
 import com.example.demo.Dto.Serial.SerialD2;
 import com.example.demo.Dto.Serial.SerialFrontPageInfo;
-import com.example.demo.Entity.*;
+import com.example.demo.Entity.Post;
+import com.example.demo.Entity.User;
 import com.example.demo.Entity.enums.Categories;
 import com.example.demo.exceptions.NotAuthenticationException;
 import com.example.demo.repos.CommentsRepo;
 import com.example.demo.repos.PostRepo;
 import com.example.demo.repos.SerialRepository;
-import com.example.demo.service.AwsBucketService;
+import com.example.demo.service.Bucket;
 import com.example.demo.service.PostService;
 import com.example.demo.service.SerialService;
 import com.example.demo.service.VoteService;
+import com.example.demo.service.impl.AwsBucketServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.security.RolesAllowed;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -64,20 +64,20 @@ public class Cont {
     PostRepo postRepo;
 
     final
-    AwsBucketService awsBucketService;
+    Bucket awsBucketServiceImpl;
 
     final SerialService serialService;
 
 
 
-    public Cont(VoteService voteService, PostService postService, CommentsRepo commentsRepo, PostRepo postRepo, AwsBucketService awsBucketService, SerialRepository serialRepository, SerialService serialService) {
+    public Cont(VoteService voteService, PostService postService, CommentsRepo commentsRepo, PostRepo postRepo, AwsBucketServiceImpl awsBucketServiceImpl, SerialRepository serialRepository, SerialService serialService) {
         this.voteService = voteService;
 
         this.postService = postService;
 
         this.commentsRepo = commentsRepo;
         this.postRepo = postRepo;
-        this.awsBucketService = awsBucketService;
+        this.awsBucketServiceImpl = awsBucketServiceImpl;
         this.serialRepository = serialRepository;
         this.serialService = serialService;
     }
@@ -178,7 +178,7 @@ public class Cont {
             String uuidFile = UUID.randomUUID().toString();
             String resultFileName = uuidFile + "."
                     + file.getOriginalFilename();
-          awsBucketService.upload(file,bucketName,resultFileName);
+          awsBucketServiceImpl.upload(file,bucketName,resultFileName);
             return resultFileName;
         }
         return "";

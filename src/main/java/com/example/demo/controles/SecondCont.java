@@ -1,6 +1,6 @@
 package com.example.demo.controles;
 
-import com.example.demo.service.PostService;
+import com.example.demo.service.impl.PostServiceImpl;
 import org.springframework.stereotype.Controller;
 
 
@@ -11,9 +11,9 @@ public class SecondCont {
 //    private String uploadPath;
 
 
-final PostService postService;
+final PostServiceImpl postService;
 
-    public SecondCont(PostService postService) {
+    public SecondCont(PostServiceImpl postService) {
         this.postService = postService;
     }
 

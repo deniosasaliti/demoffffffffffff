@@ -1,28 +1,24 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
-import org.springframework.beans.factory.annotation.Value;
+import com.example.demo.service.Bucket;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Map;
-import java.util.Optional;
 
 @Service
-public class AwsBucketService {
+public class AwsBucketServiceImpl implements Bucket {
 
 
 
 
    final AmazonS3 amazonS3;
 
-    public AwsBucketService(AmazonS3 amazonS3) {
+    public AwsBucketServiceImpl(AmazonS3 amazonS3) {
         this.amazonS3 = amazonS3;
     }
 

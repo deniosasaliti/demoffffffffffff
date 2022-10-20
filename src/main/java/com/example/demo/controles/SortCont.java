@@ -1,13 +1,13 @@
 package com.example.demo.controles;
 
-import com.example.demo.service.PostService;
+import com.example.demo.service.impl.PostServiceImpl;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class SortCont {
-    final PostService postService;
+    final PostServiceImpl postService;
 
-    public SortCont(PostService postService) {
+    public SortCont(PostServiceImpl postService) {
         this.postService = postService;
     }
 

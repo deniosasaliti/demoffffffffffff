@@ -2,14 +2,9 @@ package com.example.demo.service;
 
 import com.example.demo.Entity.User;
 import com.example.demo.Entity.VerificationToken;
-import com.example.demo.Entity.Vote;
 import com.example.demo.repos.VerificationTokenRepo;
-import com.example.demo.repos.VoteRepo;
 import com.example.demo.repos.userRepos;
-import org.junit.Assert;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import com.example.demo.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 class UserServiceTest {
     @Autowired
-    UserService service;
+    UserServiceImpl service;
     @Autowired
     VerificationTokenRepo tokenRepo;
     @Autowired

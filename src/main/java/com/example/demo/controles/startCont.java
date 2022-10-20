@@ -4,9 +4,9 @@
 //import com.example.demo.Entity.*;
 //import com.example.demo.Entity.enums.Categories;
 //import com.example.demo.repos.*;
-//import com.example.demo.service.MailService;
-//import com.example.demo.service.PostService;
-//import com.example.demo.service.UserService;
+//import com.example.demo.service.impl.MailService;
+//import com.example.demo.service.impl.PostService;
+//import com.example.demo.service.impl.UserService;
 //import org.springframework.data.domain.*;
 //import org.springframework.stereotype.Controller;
 //import org.springframework.ui.Model;
