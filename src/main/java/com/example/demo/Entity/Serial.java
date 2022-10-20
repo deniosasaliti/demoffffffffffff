@@ -89,7 +89,21 @@ public class Serial  {
     @ManyToMany(mappedBy = "serials")
     private Set<User> users = new HashSet<>();
 
+    @OneToOne(mappedBy = "serial",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
+    private Rating rating;
 
+
+    public void setRating(Rating rating){
+        if (rating == null){
+
+            if (this.rating !=null){
+                this.rating.setSerial(null);
+            }
+        }else {
+            rating.setSerial(this);
+        }
+        this.rating = rating;
+    }
 
 
 

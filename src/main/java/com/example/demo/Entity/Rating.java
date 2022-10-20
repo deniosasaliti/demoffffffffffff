@@ -19,7 +19,7 @@ public class Rating {
 
     private int ImdbRating;
     private int KopilkaRating;
-    @OneToOne()
+    @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     private Serial serial;
 

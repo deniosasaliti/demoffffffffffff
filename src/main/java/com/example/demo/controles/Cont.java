@@ -183,7 +183,7 @@ public class Cont {
         }
         return "";
     }
-    @Secured("ROLE_USER")
+
     @GetMapping("/getFrontPageInfo")
     public ResponseEntity<List<SerialFrontPageInfo>> getSerialsById(){
 
@@ -192,7 +192,7 @@ public class Cont {
         return new ResponseEntity<>(pageInfos,HttpStatus.OK);
     }
 
-
+    @Secured("ROLE_USER")
     @PostMapping("/getAllSerialByIdForSideBar")
     public ResponseEntity<List<SerialFrontPageInfo>> getSerialByUserId(@RequestParam long id){
         List<SerialFrontPageInfo> allSerialsByUserId = serialService.getAllSerialsByUserId(id);
